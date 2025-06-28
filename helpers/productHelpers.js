@@ -1,5 +1,5 @@
 const { default: mongoose } = require('mongoose');
-const Product = require('../models/product');
+const Product = require('../models/Product');
 
 const createProductHelper = async(data) =>{
     const product = new Product(data);
@@ -11,7 +11,19 @@ const getProductHelper = async(query) =>{
     const filter = {};
     if(name) filter.name = { $regex: name, $options: 'i' };
     if(category) filter.category = { $regex: category, $options: 'i' };
-    return await product.find(filter);
+    return await Product.find(filter);
 }
 
-module.exports = {createProductHelper, getProductHelper};
+const getSingleProductHelper = async(id) =>{
+    return await Product.findById(id);
+}
+
+const updateProductHelper = async (id, data) =>{
+    return await Product.findByIdAndUpdate(id, data, { new: true, runValidators: true });
+};
+
+const deleteProductHelper = async(id) =>{
+    return await Product.findByIdAndDelete(id);
+}
+
+module.exports = {createProductHelper, getProductHelper, getSingleProductHelper, updateProductHelper, deleteProductHelper};
